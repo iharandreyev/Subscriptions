@@ -16,12 +16,12 @@ final class SubscriptionsStoreTests: TestCase {
         expectCancelled(subs)
     }
     
-    func test_storeCancellsTasksOnceUponDeinit() {
+    func test_storeCancellsAllSubsOnceUponDeinit() {
         var store: SubscriptionsStore!
-        let sub = createSub()
+        let subs = createSubs()
         
         autoreleasepool {
-            store = SubscriptionsStore(sub)
+            store = SubscriptionsStore(subs)
             store = nil
         }
         
@@ -32,7 +32,7 @@ final class SubscriptionsStoreTests: TestCase {
             "Store should've been deallocated, but it didn't"
         )
         
-        expectCancelled(sub)
+        expectCancelled(subs)
     }
     
     func test_storeIsThreadSafe() {
