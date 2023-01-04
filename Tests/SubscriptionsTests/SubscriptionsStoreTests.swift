@@ -13,20 +13,15 @@ final class SubscriptionsStoreTests: TestCase {
         
         store.cancelAll()
         
-        let invalidStateSubs = subs.filter { $0.cancelCalled != 1 }
-
-        XCTAssert(
-            invalidStateSubs.isEmpty,
-            "Expected all subscriptions to be cancelled properly, but \(invalidStateSubs.count) were not"
-        )
+        expectCancelled(subs)
     }
     
     func test_storeCancellsTasksOnceUponDeinit() {
         var store: SubscriptionsStore!
-        let subscription = createSub()
+        let sub = createSub()
         
         autoreleasepool {
-            store = SubscriptionsStore(subscription)
+            store = SubscriptionsStore(sub)
             store = nil
         }
         
@@ -37,12 +32,7 @@ final class SubscriptionsStoreTests: TestCase {
             "Store should've been deallocated, but it didn't"
         )
         
-        let cancelCalled = subscription.cancelCalled
-        
-        XCTAssert(
-            cancelCalled == 1,
-            "Expected subscription to be cancelled once, got \(cancelCalled) cancels instead"
-        )
+        expectCancelled(sub)
     }
     
     func test_storeIsThreadSafe() {
@@ -67,12 +57,7 @@ final class SubscriptionsStoreTests: TestCase {
         
         wait(for: didAddSubs + [didCancelSubs], timeout: 2)
         
-        let invalidStateSubs = subs.filter { $0.cancelCalled != 1 }
-
-        XCTAssert(
-            invalidStateSubs.isEmpty,
-            "Expected all subscriptions to be cancelled properly, but \(invalidStateSubs.count) were not"
-        )
+        expectCancelled(subs)
     }
     
     // MARK: - Helpers
@@ -86,5 +71,30 @@ final class SubscriptionsStoreTests: TestCase {
     private func createSubs(count: Int = 5) -> [SubscriptionSpy] {
         (0 ..< count).map(createSub)
     }
-
+    
+    private func expectCancelled(
+        _ subs: [SubscriptionSpy],
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        for (index, sub) in subs.enumerated() {
+            expectCancelled(sub, at: index, file: file, line: line)
+        }
+    }
+    
+    private func expectCancelled(
+        _ sub: SubscriptionSpy,
+        at index: Int? = nil,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        let cancelCalled = sub.cancelCalled
+        
+        XCTAssert(
+            cancelCalled == 1,
+            "Expected subscription\(index.map { " \($0)" } ?? "") to be cancelled once, got \(cancelCalled) cancels instead",
+            file: file,
+            line: line
+        )
+    }
 }
