@@ -7,7 +7,7 @@ final class SubscriptionsStoreTests: TestCase {
         trackForMemoryLeaks(store)
     }
     
-    func test_storeCancellsSubscriptionsOnCancelAll() {
+    func test_storeCancellsSubsOnCancelAll() {
         let subs = createSubs()
         let store = SubscriptionsStore(subs)
         
