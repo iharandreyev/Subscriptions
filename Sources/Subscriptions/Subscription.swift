@@ -4,8 +4,6 @@ public protocol Subscription {
 
 extension Subscription {
     public func store(in store: SubscriptionsStore) {
-        Task(priority: .high) {
-            await store.insert(self)
-        }
+        store.insert(self)
     }
 }
