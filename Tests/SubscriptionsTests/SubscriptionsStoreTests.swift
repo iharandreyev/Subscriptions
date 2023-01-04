@@ -40,19 +40,19 @@ final class SubscriptionsStoreTests: TestCase {
         let store = SubscriptionsStore()
         
         let didAddSubs = subs.enumerated().map { offset, sub -> XCTestExpectation in
-            let queue = DispatchQueue(label: "insert-subscription-\(offset)", qos: .userInteractive)
-            let expectation = expectation(description: "Waiting for subscription \(offset) to be added into the store")
-            queue.async {
-                store.insert(sub)
-                expectation.fulfill()
+            expectationForTask("add subscription \(offset) into the store") { completion in
+                DispatchQueue(label: "insert-subscription-\(offset)", qos: .userInteractive).async {
+                    store.insert(sub)
+                    completion()
+                }
             }
-            return expectation
         }
         
-        let didCancelSubs = expectation(description: "Waiting for subscriptions to be cancelled")
-        DispatchQueue(label: "cancel-subscriptions", qos: .userInteractive).async {
-            store.cancelAll()
-            didCancelSubs.fulfill()
+        let didCancelSubs = expectationForTask("cancel all") { completion in
+            DispatchQueue(label: "cancel-subscriptions", qos: .userInteractive).async {
+                store.cancelAll()
+                completion()
+            }
         }
         
         wait(for: didAddSubs + [didCancelSubs], timeout: 2)
