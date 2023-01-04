@@ -110,6 +110,15 @@ let package = Package(
 $ swift build
 ```
 
+Alternatevly:
+1. Go to your project settings.
+2. Go to `Package Dependencies` tab
+3. Click the `+` button
+4. Put `https://github.com/iharandreyev/Subscriptions.git` into `Search or Enter Package URL` field
+5. Click `Add Package`
+6. Go to your app target
+7. And add the package into `Frameworks, Libraries and Embedded Content` list
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
