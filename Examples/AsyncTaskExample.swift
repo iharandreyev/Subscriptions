@@ -14,12 +14,12 @@ public class AsyncTaskExample {
     public init() { }
     
     public func runExample() {
-        Task {
+        Task { [unowned self] in
             do {
                 let data = try await performAsyncFetch()
-                print(data)
+                succeed(with: data)
             } catch {
-                print(error)
+                fail(with: error)
             }
         }
         .store(in: subs)
@@ -27,6 +27,14 @@ public class AsyncTaskExample {
     
     private func performAsyncFetch() async throws -> Data {
         try String(describing: Self.self).data(using: .utf8)
+    }
+    
+    private func succeed(with data: Data) {
+        print(data)
+    }
+    
+    private func fail(with error: Error) {
+        print(error)
     }
 }
 
