@@ -8,14 +8,7 @@ final class SubscriptionsStoreTests: TestCase {
     }
     
     func test_storeCancellsSubscriptionsOnCancelAll() {
-        let subs: [SubscriptionSpy] = [
-            SubscriptionSpy(
-                SubscriptionMock { print("\(#function): did cancel subscription 1") }
-            ),
-            SubscriptionSpy(
-                SubscriptionMock { print("\(#function): did cancel subscription 2") }
-            )
-        ]
+        let subs = createSubs()
         let store = SubscriptionsStore(subs)
         
         store.cancelAll()
@@ -30,9 +23,7 @@ final class SubscriptionsStoreTests: TestCase {
     
     func test_storeCancellsTasksOnceUponDeinit() {
         var store: SubscriptionsStore!
-        let subscription = SubscriptionSpy(
-            SubscriptionMock { print("\(#function): did cancel subscription") }
-        )
+        let subscription = createSub()
         
         autoreleasepool {
             store = SubscriptionsStore(subscription)
@@ -55,12 +46,7 @@ final class SubscriptionsStoreTests: TestCase {
     }
     
     func test_storeIsThreadSafe() {
-        let count = 100
-        let subs: [SubscriptionSpy] = (0 ..< count).map { offset in
-            SubscriptionSpy(
-                SubscriptionMock { print("\(#function): did cancel subscription \(offset)") }
-            )
-        }
+        let subs = createSubs(count: 100)
         let store = SubscriptionsStore()
         
         let didAddSubs = subs.enumerated().map { offset, sub -> XCTestExpectation in
@@ -88,4 +74,17 @@ final class SubscriptionsStoreTests: TestCase {
             "Expected all subscriptions to be cancelled properly, but \(invalidStateSubs.count) were not"
         )
     }
+    
+    // MARK: - Helpers
+    
+    private func createSub(_ index: Int = 0) -> SubscriptionSpy {
+        SubscriptionSpy(
+            SubscriptionMock { debugPrint("\(#function): did cancel subscription \(index)") }
+        )
+    }
+    
+    private func createSubs(count: Int = 5) -> [SubscriptionSpy] {
+        (0 ..< count).map(createSub)
+    }
+
 }
