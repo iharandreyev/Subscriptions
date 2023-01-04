@@ -4,31 +4,45 @@ import XCTest
 final class TaskTests: TestCase {
     func test_asyncTaskIsCancelledOnCancelAll() {
         let store = SubscriptionsStore()
-        
-        let subscription = Task.sleep(seconds: 300)
-        subscription.store(in: store)
+        let task = createTask()
+        task.store(in: store)
         
         store.cancelAll()
         
-        XCTAssert(
-            subscription.isCancelled,
-            "Expected task to be cancelled, but it did not"
-        )
+        assertCancelled(task)
     }
     
     func test_taskIsCancelledUponStoreDeinit() {
         var store: SubscriptionsStore!
-        let subscription = Task.sleep(seconds: 300)
+        let task = createTask()
         
         autoreleasepool {
             store = SubscriptionsStore()
-            subscription.store(in: store)
+            task.store(in: store)
             store = nil
         }
 
+        assertCancelled(task)
+    }
+    
+    // MARK: - Helpers
+    
+    private func createTask() -> Task<Void, Error> {
+        .sleep(seconds: 300)
+    }
+    
+    private func assertCancelled(
+        _ task: Task<Void, Error>,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
         XCTAssert(
-            subscription.isCancelled,
-            "Expected task to be cancelled, but it did not"
+            task.isCancelled,
+            "Expected task to be cancelled, but it did not",
+            file: file,
+            line: line
         )
     }
+    
+    
 }
