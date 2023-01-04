@@ -13,7 +13,7 @@ final class SubscriptionsStoreTests: TestCase {
         
         store.cancelAll()
         
-        expectCancelled(subs)
+        assertCancelled(subs)
     }
     
     func test_storeCancellsAllSubsOnceUponDeinit() {
@@ -32,7 +32,7 @@ final class SubscriptionsStoreTests: TestCase {
             "Store should've been deallocated, but it didn't"
         )
         
-        expectCancelled(subs)
+        assertCancelled(subs)
     }
     
     func test_storeIsThreadSafe() {
@@ -57,7 +57,7 @@ final class SubscriptionsStoreTests: TestCase {
         
         wait(for: didAddSubs + [didCancelSubs], timeout: 2)
         
-        expectCancelled(subs)
+        assertCancelled(subs)
     }
     
     // MARK: - Helpers
@@ -72,17 +72,17 @@ final class SubscriptionsStoreTests: TestCase {
         (0 ..< count).map(createSub)
     }
     
-    private func expectCancelled(
+    private func assertCancelled(
         _ subs: [SubscriptionSpy],
         file: StaticString = #file,
         line: UInt = #line
     ) {
         for (index, sub) in subs.enumerated() {
-            expectCancelled(sub, at: index, file: file, line: line)
+            assertCancelled(sub, at: index, file: file, line: line)
         }
     }
     
-    private func expectCancelled(
+    private func assertCancelled(
         _ sub: SubscriptionSpy,
         at index: Int? = nil,
         file: StaticString = #file,
