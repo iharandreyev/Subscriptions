@@ -1,0 +1,30 @@
+# This workflow will build a Swift project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+
+name: Swift
+
+on:
+  push:
+    branches: [ "main" ] # trigger on each push to master
+  pull_request:
+    branches: [ "main" ] # trigger on each PR for master
+  schedule: # triggering the jobs according to predefined schedule
+    - cron: 0 0 * * SUN # trigger once a week, according to the [cron syntax](https://crontab.guru)
+    
+jobs:
+
+  build-latest:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Show eligible build destinations
+      run: xcodebuild -showdestinations -scheme Subscriptions
+    - name: Build and test ( macOS)
+      run: xcodebuild test -scheme Subscriptions -destination 'platform=macOS,arch=x86_64,id=4203018E-580F-C1B5-9525-B745CECA79EB'
+    - name: Build and test ( mac Catalyst)
+      run: xcodebuild test -scheme Subscriptions -destination 'platform=macOS,arch=x86_64,variant=Mac Catalyst,id=4203018E-580F-C1B5-9525-B745CECA79EB'
+    - name: Build and test ( iOS 16.0)
+      run: xcodebuild test -scheme Subscriptions -destination 'platform=iOS Simulator,OS=16.0,name=iPhone 11'
+    - name: Build and test ( watchOS 9.0)
+      run: xcodebuild test -scheme Subscriptions -destination 'platform=watchOS Simulator,OS=9.0,name=Apple Watch SE (44mm) (2nd generation)'
