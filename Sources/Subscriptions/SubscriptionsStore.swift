@@ -1,5 +1,6 @@
 public final class SubscriptionsStore {
-    @ThreadSafe
+    private let lock = Lock()
+    
     private var subscriptions: [Subscription]
     
     public init(_ subscriptions: [Subscription] = []) {
@@ -15,14 +16,19 @@ public final class SubscriptionsStore {
     }
     
     public func insert(_ subscription: Subscription) {
+        lock.lock()
+        defer { lock.unlock() }
+        
         subscriptions.append(subscription)
     }
     
     public func cancelAll() {
-        let subscriptions = subscriptions
+        lock.lock()
+        defer { lock.unlock() }
         
         subscriptions.forEach {
             $0.cancel()
         }
+        subscriptions.removeAll(keepingCapacity: false)
     }
 }
