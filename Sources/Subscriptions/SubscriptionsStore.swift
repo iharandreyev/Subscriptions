@@ -53,18 +53,11 @@ public final class SubscriptionsStore {
 }
 
 extension SubscriptionsStore {
-    public convenience init(@SubscriptionsBuilder _ subscriptions: () -> [Subscription]) {
+    public convenience init(@ArrayBuilder<Subscription> _ subscriptions: () -> [Subscription]) {
         self.init(subscriptions())
     }
     
-    public func insert(@SubscriptionsBuilder _ subscriptions: () -> [Subscription]) {
+    public func insert(@ArrayBuilder<Subscription> _ subscriptions: () -> [Subscription]) {
         insert(subscriptions())
-    }
-
-    @resultBuilder
-    public struct SubscriptionsBuilder {
-        public static func buildBlock(_ subscriptions: Subscription...) -> [Subscription] {
-            return subscriptions
-        }
     }
 }
