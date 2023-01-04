@@ -3,7 +3,10 @@
 <img src="https://img.shields.io/github/actions/workflow/status/iharandreyev/Subscriptions/swift.yml" alt="Build Status" />
 <img src="https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20watchOS-333333.svg" alt="Supported Platforms: iOS, macOS, & watchOS" />
 <br />
-<a href="https://github.com/apple/swift-package-manager" alt="Subscriptions on Swift Package Manager" title="Subscriptions on Swift Package Manager"><img src="https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg" /></a>
+<a href="https://github.com/apple/swift-package-manager" alt="Subscriptions on Swift Package Manager" title="Subscriptions on Swift Package Manager"><img
+src="https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg" /></a>
+<br />
+<img src="https://img.shields.io/github/license/iharandreyev/Subscriptions" alt="MIT license"
 </p>
 
 A small package that enables convenient async tasks subscriptions management, inspired by [RxSwift.DisposeBag](https://github.com/ReactiveX/RxSwift/blob/main/RxSwift/Disposables/DisposeBag.swift)
