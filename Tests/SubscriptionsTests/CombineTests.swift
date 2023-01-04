@@ -5,35 +5,46 @@ import XCTest
 final class CombineTests: TestCase {
     func test_sinkIsCancelledOnCancelAll() {
         let store = SubscriptionsStore()
-        
-        let subject = PassthroughSubject<Int, Never>()
-        let subscription = CancellableSpy(subject.sink())
-        
-        subscription.store(in: store)
+        let sub = createSub()
+        sub.store(in: store)
         
         store.cancelAll()
         
-        XCTAssert(
-            subscription.cancelCalled == 1,
-            "Expected sink to be cancelled once, got \(subscription.cancelCalled) cancel count instead"
-        )
+        assertCancelled(sub)
     }
     
     func test_sinkIsCancelledUponStoreDeinit() {
         var store: SubscriptionsStore!
-        
-        let subject = PassthroughSubject<Int, Never>()
-        let subscription = CancellableSpy(subject.sink())
+        let sub = createSub()
 
         autoreleasepool {
             store = SubscriptionsStore()
-            subscription.store(in: store)
+            sub.store(in: store)
             store = nil
         }
 
+        assertCancelled(sub)
+    }
+    
+    // MARK: - Helpers
+    
+    private func createSub() -> CancellableSpy {
+        let subject = PassthroughSubject<Int, Never>()
+        return CancellableSpy(subject.sink())
+    }
+    
+    private func assertCancelled(
+        _ sub: CancellableSpy,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        let cancelCalled = sub.cancelCalled
+        
         XCTAssert(
-            subscription.cancelCalled == 1,
-            "Expected sink to be cancelled once, got \(subscription.cancelCalled) cancel count instead"
+            cancelCalled == 1,
+            "Expected sink to be cancelled once, got \(cancelCalled) cancels instead",
+            file: file,
+            line: line
         )
     }
 }
