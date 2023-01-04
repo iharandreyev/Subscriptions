@@ -1,15 +1,15 @@
 import Subscriptions
 
 final class SubscriptionSpy: Subscription {
-    private let cancelClosure: () -> Void
+    private let subscription: Subscription
     private(set) var cancelCalled: Int = 0
     
-    init(_ cancel: @escaping () -> Void) {
-        cancelClosure = cancel
+    init(_ subscription: Subscription) {
+        self.subscription = subscription
     }
 
     func cancel() {
         cancelCalled += 1
-        cancelClosure()
+        subscription.cancel()
     }
 }

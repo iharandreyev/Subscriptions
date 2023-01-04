@@ -4,7 +4,7 @@ import XCTest
 final class SubscriptionsTests: TestCase {
     func test_subscriptionIsCancelledUponStoreDeinit() {
         var store: SubscriptionsStore!
-        let subscription = SubscriptionSpy { }
+        let subscription = SubscriptionSpy(SubscriptionMock())
         
         autoreleasepool {
             store = SubscriptionsStore()
