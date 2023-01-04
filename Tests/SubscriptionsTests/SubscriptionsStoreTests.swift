@@ -24,14 +24,8 @@ final class SubscriptionsStoreTests: TestCase {
             store = SubscriptionsStore(subs)
             store = nil
         }
-        
-        let isStoreDeallocated = store == nil
-        
-        XCTAssert(
-            isStoreDeallocated,
-            "Store should've been deallocated, but it didn't"
-        )
-        
+
+        XCTAssertNil(store, "Store should've been deallocated, but it didn't")
         assertCancelled(subs)
     }
     
