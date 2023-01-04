@@ -7,6 +7,27 @@ final class SubscriptionsStoreTests: TestCase {
         trackForMemoryLeaks(store)
     }
     
+    func test_storeCancellsSubscriptionsOnCancelAll() {
+        let subs: [SubscriptionSpy] = [
+            SubscriptionSpy(
+                SubscriptionMock { print("\(#function): did cancel subscription 1") }
+            ),
+            SubscriptionSpy(
+                SubscriptionMock { print("\(#function): did cancel subscription 2") }
+            )
+        ]
+        let store = SubscriptionsStore(subs)
+        
+        store.cancelAll()
+        
+        let invalidStateSubs = subs.filter { $0.cancelCalled != 1 }
+
+        XCTAssert(
+            invalidStateSubs.isEmpty,
+            "Expected all subscriptions to be cancelled properly, but \(invalidStateSubs.count) were not"
+        )
+    }
+    
     func test_storeCancellsTasksOnceUponDeinit() {
         var store: SubscriptionsStore!
         let subscription = SubscriptionSpy(
