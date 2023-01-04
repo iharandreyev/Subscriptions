@@ -1,3 +1,11 @@
+//
+//  TestCase.swift
+//  Subscriptions
+//
+//  Created by Ihar Andreyeu on 1/4/23.
+//  Copyright © 2023 Ihar Andreyeu. All rights reserved.
+//
+
 import XCTest
 
 // @inlinable doesn't work for methods defined in extensions, hence this subclass

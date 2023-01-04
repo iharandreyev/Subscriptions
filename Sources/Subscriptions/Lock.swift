@@ -1,8 +1,9 @@
 //
-//  File.swift
-//  
+//  Lock.swift
+//  Subscriptions
 //
-//  Created by Andreyeu, Ihar on 1/4/23.
+//  Created by Ihar Andreyeu on 1/4/23.
+//  Copyright © 2023 Ihar Andreyeu. All rights reserved.
 //
 
 import Foundation
