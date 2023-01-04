@@ -2,7 +2,7 @@ import Combine
 import Subscriptions
 import XCTest
 
-final class SubscriptionsCombineTests: TestCase {
+final class CombineTests: TestCase {
     func test_sinkIsCancelledUponStoreDeinit() {
         var store: SubscriptionsStore!
         let subject = PassthroughSubject<Int, Never>()
