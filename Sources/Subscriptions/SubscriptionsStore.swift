@@ -30,6 +30,17 @@ public final class SubscriptionsStore {
         subscriptions.append(subscription)
     }
     
+    public func insert(_ subscriptions: Subscription...) {
+        insert(subscriptions)
+    }
+    
+    public func insert(_ subscriptions: [Subscription]) {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        self.subscriptions.append(contentsOf: subscriptions)
+    }
+    
     public func cancelAll() {
         lock.lock()
         defer { lock.unlock() }
@@ -38,5 +49,15 @@ public final class SubscriptionsStore {
             $0.cancel()
         }
         subscriptions.removeAll(keepingCapacity: false)
+    }
+}
+
+extension SubscriptionsStore {
+    public convenience init(@ArrayBuilder<Subscription> _ subscriptions: () -> [Subscription]) {
+        self.init(subscriptions())
+    }
+    
+    public func insert(@ArrayBuilder<Subscription> _ subscriptions: () -> [Subscription]) {
+        insert(subscriptions())
     }
 }
